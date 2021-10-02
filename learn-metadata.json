@@ -1,0 +1,29 @@
+{
+    "title": "Sample lab",
+    "shortName": "smpl_lab",
+    "description": "Sample description",
+    "assessmentPath": "./assessment",
+    "deploymentPath": "./deploy",
+    "testProjectPath": "./testProject.md",
+    "answerSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "ticket1": {
+                "type": "string",
+                "placeholder": "answer1",
+                "title": "Вопрос 1"
+            },
+            "ticket2": {
+                "type": "string",
+                "placeholder": "answer2",
+                "title": "Вопрос 2"
+            },
+            "endpoint_url": {
+                "type": "string",
+                "title": "адрес приложения",
+                "placeholder": "https://example.com"
+            }
+        }
+    }
+}
