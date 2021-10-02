@@ -6,6 +6,12 @@ output "learn_rg" {
 
 output "learn_user" {
   value       = azuread_user.learn.user_principal_name
-  description = "description"
+  description = "Main User"
+  depends_on  = []
+}
+
+output "learn_password" {
+  value       = azuread_user.learn.password
+  description = "Main Password"
   depends_on  = []
 }
