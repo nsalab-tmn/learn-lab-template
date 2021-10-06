@@ -13,5 +13,6 @@ output "learn_user" {
 output "learn_password" {
   value       = azuread_user.learn.password
   description = "Main Password"
+  sensitive = true
   depends_on  = []
 }

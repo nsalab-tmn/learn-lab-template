@@ -39,5 +39,11 @@
             "title": "Адрес портала",
             "value": "https://portal.azure.com"
         }
-    }
+    },
+    "duration": "PT3H30M",
+    "difficulty": 10,
+    "tags": [
+        "Azure", "SampleTag"
+    ],
+    "skills": {}
 }
