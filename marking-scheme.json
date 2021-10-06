@@ -1,0 +1,38 @@
+{
+    "criterion": [
+        {
+            "id": "sample id",
+            "name": "sample criterion name",
+            "mark": "summary of marks of this criterion",
+            "subCriterion": [
+                {
+                    "id": "sample id",
+                    "name": "sample sub criterion name",
+                    "mark": "summary of marks of this sub criterion",
+                    "aspects": [
+                        {
+                            "id": "sample id",
+                            "name": "sample aspect name",
+                            "type": "type of aspect. type can be 'r','f','s'. 'r'-resource. checking resource availability or property. 'r' must have field 'filter_for_reseach_in_resourse'. 'f'-funtional. checking if the website is responding. 'f' must have field 'number_of_student_answer'. s-ssh. checking inside the resource.",
+                            "filterForReseachInResourse":
+                            {
+                                "resourseGroupName": "sample name of resourseGroup",
+                                "provider": "sample provider",
+                                "client": "sample client",
+                                "query": "query for jmespath"
+                            },
+                            "mark": "mark of this aspect"
+                        },
+                        {
+                            "id": "sample id",
+                            "name": "sample aspect name",
+                            "type": "type of aspect. type can be 'r','f','s'. 'r'-resource. checking resource availability or property. 'r' must have field 'filter_for_reseach_in_resourse'. 'f'-funtional. checking if the website is responding. 'f' must have field 'number_of_student_answer'. s-ssh. checking inside the resource.",
+                            "numberOfStudentAnswer": "number of student answer",
+                            "mark": "mark of this aspect"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
