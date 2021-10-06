@@ -4,7 +4,7 @@
             "id": "sample id",
             "name": "sample criterion name",
             "mark": "summary of marks of this criterion",
-            "sub_criterion": [
+            "subCriterion": [
                 {
                     "id": "sample id",
                     "name": "sample sub criterion name",
@@ -14,7 +14,7 @@
                             "id": "sample id",
                             "aspect": "sample aspect name",
                             "type": "type of aspect. type can be 'r','f','s'. 'r'-resource. checking resource availability or property. 'r' must have field 'filter_for_reseach_in_resourse'. 'f'-funtional. checking if the website is responding. 'f' must have field 'number_of_student_answer'. s-ssh. checking inside the resource.",
-                            "filter_for_reseach_in_resourse":
+                            "filterForReseachInResourse":
                             {
                                 "resourseGroupName": "sample name of resourseGroup",
                                 "provider": "sample provider",
@@ -27,7 +27,7 @@
                             "id": "sample id",
                             "aspect": "sample aspect name",
                             "type": "type of aspect. type can be 'r','f','s'. 'r'-resource. checking resource availability or property. 'r' must have field 'filter_for_reseach_in_resourse'. 'f'-funtional. checking if the website is responding. 'f' must have field 'number_of_student_answer'. s-ssh. checking inside the resource.",
-                            "number_of_student_answer": "number of student answer",
+                            "numberOfStudentAnswer": "number of student answer",
                             "mark": "mark of this aspect"
                         }
                     ]
