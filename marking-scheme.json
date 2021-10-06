@@ -12,7 +12,7 @@
                     "aspects": [
                         {
                             "id": "sample id",
-                            "aspect": "sample aspect name",
+                            "name": "sample aspect name",
                             "type": "type of aspect. type can be 'r','f','s'. 'r'-resource. checking resource availability or property. 'r' must have field 'filter_for_reseach_in_resourse'. 'f'-funtional. checking if the website is responding. 'f' must have field 'number_of_student_answer'. s-ssh. checking inside the resource.",
                             "filterForReseachInResourse":
                             {
@@ -25,7 +25,7 @@
                         },
                         {
                             "id": "sample id",
-                            "aspect": "sample aspect name",
+                            "name": "sample aspect name",
                             "type": "type of aspect. type can be 'r','f','s'. 'r'-resource. checking resource availability or property. 'r' must have field 'filter_for_reseach_in_resourse'. 'f'-funtional. checking if the website is responding. 'f' must have field 'number_of_student_answer'. s-ssh. checking inside the resource.",
                             "numberOfStudentAnswer": "number of student answer",
                             "mark": "mark of this aspect"
