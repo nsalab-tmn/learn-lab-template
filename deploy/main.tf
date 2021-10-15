@@ -16,7 +16,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "learn" {
   name     = "rg-${var.tp_name}-${var.instance_id}"
-  location = "eastus2"
+  location = "eastus"
 }
 
 resource "random_string" "learn" {
@@ -40,4 +40,10 @@ resource "azurerm_role_assignment" "learn" {
   scope                = azurerm_resource_group.learn.id
   role_definition_name = "Contributor"
   principal_id         = azuread_user.learn.object_id
+}
+
+resource "azurerm_resource_group_policy_assignment" "allowed-location-assignment" {
+  name                 = "policy-location-assignment"
+  resource_group_id    = azurerm_resource_group.learn.id
+  policy_definition_id = azurerm_policy_definition.allowed-location-definition.id
 }
