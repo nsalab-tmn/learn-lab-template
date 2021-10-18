@@ -2,9 +2,10 @@
     "title": "Sample lab",
     "shortName": "smpl_lab",
     "description": "Sample description",
-    "assessmentPath": "./assessment",
-    "deploymentPath": "./deploy",
-    "testProjectPath": "./testProject.md",
+    "assessmentPath": "assessment",
+    "deploymentPath": "deploy",
+    "testProjectPath": "testProject.md",
+    "assetsPath": "assets",
     "answerSchema": {
         "type": "object",
         "additionalProperties": false,
