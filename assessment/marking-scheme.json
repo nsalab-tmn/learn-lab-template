@@ -16,10 +16,10 @@
                             "type": "type of aspect. type can be 'r','f','s'. 'r'-resource. checking resource availability or property. 'r' must have field 'filterForReseachInResourse'. 'f'-funtional. checking if the website is responding. 'f' must have field 'numberOfStudentAnswer'. 's'-ssh. checking inside the resource.",
                             "filterForReseachInResourse":
                             {
-                                "resourseGroupName": "sample name of resourseGroup",
                                 "provider": "sample provider",
                                 "client": "sample client",
-                                "query": "query for jmespath"
+                                "query": "query for jmespath",
+                                "api_verion": "sample api version"
                             },
                             "mark": "mark of this aspect"
                         },
