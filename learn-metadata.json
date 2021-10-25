@@ -1,6 +1,7 @@
 {
     "title": "Sample lab",
     "shortName": "smpl_lab",
+    "materialType": "lab",
     "description": "Sample description",
     "assessmentPath": "assessment",
     "deploymentPath": "deploy",
