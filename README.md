@@ -26,22 +26,22 @@
 
 ## Формат файла схемы оценки marking-scheme.json
 Файл является json файлом со следующим набором полей:
-* `criterion` - словарь критериев со следующими полями:
-   * `id` - индентификатор критерия. набор цифр;
+Словарь критериев:
+* `id` - индентификатор критерия. Набор букв. Словарь полей критерия:
    * `name` - название критерия;
-   * `mark` - баллы за критерий;
-   * `subCriterion` - словарь саб критериев:
-      * `id` - индентификатор саб критерия. Набор цифр;
-      * `name` - название саб критерия;
-      * `mark` - баллы за саб критерий;
-      * `aspects` - словарь аспектов:
-         * `id` - индентификатор аспекта. Набор цифр; 
-         * `name` - название аспекта;
-         * `mark` - баллы за аспект;
-         * `type` - тип аспекта; типы могут быть `r`,`f`,`s`. `r` - ресурс, проверка начилия ресурса или свойства ресурса. `r` должен содержать поле `filterForReseachInResourse`. `f` - функциональная провека, проверка, работает ли веб-сайт по оставленной ссылке. `f` должен содержать поле `numberOfStudentAnswer`. `s`-ssh, проверка внутри ресурса, выполнение каких-либо команд внутри вм.
-         * `filterForReseachInResourse` - словарь полей для поиска ресурса для запроса url = `f"https://management.azure.com/subscriptions/{__cloud53AzureSubscription}/resourceGroups/{resourseGroupName}/providers/{provider}/{client}?api-version=2021-03-01"`:
-            * `resourseGroupName` - название ресурс группы
-            * `provider` - provider. Например: `Microsoft.Compute`
-            * `client` - client. Например: `virtualMachines`.
-            * `query` - строка для поиска в формате jmespath. Например: `value[?name=='myVM']`
-         * `numberOfStudentAnswer` - номер ответа студента.
+   * `max_mark` - баллы за критерий;
+   * `subCriterions` - словарь саб критериев:
+      * `id` - индентификатор саб критерия. Набор цифр. Словарь полей саб критерия:
+         * `name` - название саб критерия;
+         * `max_mark` - баллы за саб критерий;
+         * `aspects` - словарь аспектов:
+            * `id` - индентификатор аспекта. Набор цифр. Словарь полей аспекта:
+               * `name` - название аспекта;
+               * `max_mark` - баллы за аспект;
+               * `type` - тип аспекта; типы могут быть `jmespath`,`webrequest`. `jmespath` -  проверка начилия ресурса или свойства ресурса c помощью jmespath. `jmespath` должен содержать поле `filterForReseachInResourse`. `webrequest` - проверка, доступен ли веб-сайт по оставленной ссылке. `webrequest` должен содержать поле `nameAnswer`. 
+               * `filterForReseachInResourse` - словарь полей для поиска ресурса для запроса url = `f"https://management.azure.com/subscriptions/{__cloud53AzureSubscription}/resourceGroups/{resourseGroupName}/providers/{provider}/{client}?api-version={api_verion}"`:
+                  * `api_verion` - версия api management azure. Например: `2021-07-01`
+                  * `provider` - provider. Например: `Microsoft.Compute`
+                  * `client` - client. Например: `virtualMachines`.
+                  * `query` - строка для поиска в формате jmespath. Например: `value[?name=='myVM']`
+               * `nameAnswer` - имя ответа студента.

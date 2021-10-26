@@ -3,7 +3,7 @@
     "shortName": "smpl_lab",
     "materialType": "lab",
     "description": "Sample description",
-    "assessmentPath": "assessment",
+    "assessmentPath": "./assessment/marking-scheme.json",
     "deploymentPath": "deploy",
     "testProjectPath": "testProject.md",
     "assetsPath": "assets",
