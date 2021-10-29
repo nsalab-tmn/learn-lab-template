@@ -38,10 +38,13 @@
             * `id` - индентификатор аспекта. Набор цифр. Словарь полей аспекта:
                * `name` - название аспекта;
                * `max_mark` - баллы за аспект;
-               * `type` - тип аспекта; типы могут быть `jmespath`,`webrequest`. `jmespath` -  проверка начилия ресурса или свойства ресурса c помощью jmespath. `jmespath` должен содержать поле `filterForReseachInResourse`. `webrequest` - проверка, доступен ли веб-сайт по оставленной ссылке. `webrequest` должен содержать поле `nameAnswer`. 
-               * `filterForReseachInResourse` - словарь полей для поиска ресурса для запроса url = `f"https://management.azure.com/subscriptions/{__cloud53AzureSubscription}/resourceGroups/{resourseGroupName}/providers/{provider}/{client}?api-version={api_verion}"`:
+               * `type` - тип аспекта; типы могут быть `jmespath`,`webrequest`. `jmespath` -  проверка начилия ресурса или свойства ресурса c помощью jmespath и rest api azure. `jmespath` должен содержать словарь `actions`, которые содержат поле `filterForReseachInResourse`. `webrequest` - проверка, доступен ли веб-сайт по оставленной ссылке. `webrequest` должен содержать поле `nameAnswer`, `allresource` - проверка начилия ресурса или свойства ресурса c помощью jmespath из всех ресурсов группы. `allresource` должен содержать словарь `actions`, которые содержат поле `filterForReseachInResourse` 
+               * `filterForReseachInResourse` - словарь полей для типа jmespath для поиска ресурса для запроса url = `f"https://management.azure.com/subscriptions/{__cloud53AzureSubscription}/resourceGroups/{resourseGroupName}/providers/{provider}/{client}?api-version={api_verion}"`:
                   * `api_verion` - версия api management azure. Например: `2021-07-01`
                   * `provider` - provider. Например: `Microsoft.Compute`
                   * `client` - client. Например: `virtualMachines`.
                   * `query` - строка для поиска в формате jmespath. Например: `value[?name=='myVM']`
                * `nameAnswer` - имя ответа студента.
+               *  `filterForReseachInResourse` - словарь полей для типа allresource для поиска ресурса для запроса url = `f"https://management.azure.com/subscriptions/{__cloud53AzureSubscription}/resourceGroups/{resourseGroupName}/resourses?api-version={api_verion}"`:
+                  * `api_verion` - версия api management azure. Например: `2021-07-01`
+                  * `query` - строка для поиска в формате jmespath. Например: `value[?starts_with(name,'my-hub-group') && type == 'Microsoft.Devices/IotHubs'].name`
