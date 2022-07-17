@@ -8,10 +8,10 @@
 * `materialType` - тип учебного материала. для лабораторных работ = "lab"
 * `shortName` - короткое наименование. Должно содержать не более 10 символов [a-z_]
 * `description` - короткое описание лабораторной
-* `assessmentPath` - путь к папке с определением схемы оценки (для компонента LAB-ASSESSMENT)
-* `deploymentPath` - путь к папке с определением сценария развертки terraform (для компонента LAB-DEPLOY)
-* `assetsPath` - путь к папке с изображениями и прочими материалами, которые необходимо загрузить в объектное хранилище
-* `testProjectPath` - путь к файлу с определением текста задания в формате Markdown 
+* `markingScheme` - схема оценки лабораторной работы (для компонента LAB-ASSESSMENT)
+* `deploy` - список файлов с определением сценария развертки terraform (для компонента LAB-DEPLOY)
+* `assets` - список файлов с изображениями и прочими материалами, которые необходимо загрузить в объектное хранилище
+* `text` - текст задания в формате Markdown
 * `answerSchema` - jsonSchema определяющая список и формат полей для ответа. Каждый item в словаре `properties` - идентификатор поля ответа. В дополенение введены следующие поля:
     * `title` - человекочитаемое наименование поля или текст вопроса
     * `placeholder` - плейсхолдер отображаемый в поле ответа
@@ -48,3 +48,23 @@
                *  `filterForReseachInResourse` - словарь полей для типа allresource для поиска ресурса для запроса url = `f"https://management.azure.com/subscriptions/{__cloud53AzureSubscription}/resourceGroups/{resourseGroupName}/resourses?api-version={api_verion}"`:
                   * `api_verion` - версия api management azure. Например: `2021-07-01`
                   * `query` - строка для поиска в формате jmespath. Например: `value[?starts_with(name,'my-hub-group') && type == 'Microsoft.Devices/IotHubs'].name`
+
+## Формат списка файлов
+Списки файлов для загрузки в облачное хранилище определяются как словарь в ключе которого относительная ссылка для загрузки в файловое хранилище, а в значении - полная ссылка на файл. Например:
+
+```json
+{
+  "./deploy/main.tf": "https://github.com/nsalab-tmn/learn-lab-template/tree/deploy/main.tf?ref=master",
+  "./deploy/outputs.tf": "https://github.com/nsalab-tmn/learn-lab-template/tree/deploy/outputs.tf?ref=master",
+  "./deploy/policies.tf": "https://github.com/nsalab-tmn/learn-lab-template/tree/deploy/policies.tf?ref=master",
+  "./deploy/variables.tf": "https://github.com/nsalab-tmn/learn-lab-template/tree/deploy/variables.tf?ref=master",
+}
+```
+
+
+## Реферальные ссылки в файле метаданных
+Файл поддерживает реферельные ссылки по стандарту JSON Reference. Чтобы указать значение поля через ссылку, необходимо указать объект с полем `$ref` в значении которого указана ссылка на файл, из которого будет взято содержимое. Ссылки могут быть как относительными (`./assessment/marking-scheme.json`), так и полными (`https://example.org/sample.json`). Таким образом можно определять любые JSON-объекты во внешних файлах и ссылаться на них в файле метаданных. В случае, если содержимое файла по ссылке не удалось распознать как JSON, собержимое буддет интерпретироваться как текст.
+
+Можно так же указывать ссылки на папки. В этом случае будет формироваться словарь файлов в ключе которого будет путь до файла, а в значении - полная ссылка на него.
+
+Для использования ссылок на файлы из GitHub необходимо выделить в ссылке имя ветки репозитория и перенести его в параметр запроса `ref`. Например, если полная ссылка на файл `https://github.com/nsalab-tmn/learn-lab-template/blob/master/deploy/main.tf`, то в метаданных ссылка дожлна быть `https://github.com/nsalab-tmn/learn-lab-template/blob/deploy/main.tf?ref=master`
