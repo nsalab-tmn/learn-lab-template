@@ -1,0 +1,52 @@
+# Marking scheme for the local Docker lab — the current learn-assessment (pyATS) model.
+#
+# Structure the engine walks: Criterions[] -> subCriterions[] -> aspects[] -> steps[] ->
+# action_chain[]. An aspect passes iff at least one step ran and every ran step passed; a step
+# fails if its target device is unreachable or any action raises. `verify_output` runs a shell
+# command over SSH and asserts each tag is (present|absent) per `tags_are_present`.
+#
+# This replaces the Azure-management-REST marking-scheme.json for the local target. It grades a
+# tiny sample task (see testProject in assessment.docker/README.md): the learner SSHes in and
+# writes "done" into /home/learner/answer.txt.
+mark: 0
+max_mark: 0
+Criterions:
+  - code: A
+    name: Local lab — access and task
+    subCriterions:
+      - code: "1"
+        name: Access
+        aspects:
+          - code: "1"
+            name: SSH access works as the learner user
+            max_mark: 5
+            steps:
+              - code: "1"
+                name: whoami returns the learner user
+                device: lab
+                type: verify
+                action_chain:
+                  - action: verify_output
+                    action_vars:
+                      command: whoami
+                      assert_tags:
+                        - learner
+                      tags_are_present: true
+      - code: "2"
+        name: Task
+        aspects:
+          - code: "1"
+            name: Learner wrote "done" to /home/learner/answer.txt
+            max_mark: 5
+            steps:
+              - code: "1"
+                name: answer file exists with the expected content
+                device: lab
+                type: verify
+                action_chain:
+                  - action: verify_output
+                    action_vars:
+                      command: "cat /home/learner/answer.txt 2>/dev/null || true"
+                      assert_tags:
+                        - done
+                      tags_are_present: true

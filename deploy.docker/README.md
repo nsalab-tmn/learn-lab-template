@@ -40,10 +40,9 @@ ingestion + `LEARN_CORE_LAB_TARGET` selection changes gated on the KB decision).
   provider schemas (`terraform init && terraform validate` — succeeds).
 - **Not yet run end-to-end** — that needs the compose stack (`learn-infra`) up and a matching
   assessment marking scheme.
-- **Assessment side is still TODO.** The current `assessment/marking-scheme.json` uses the
-  Azure-management-REST (`jmespath`/`allresource`) model, which does **not** apply to a Docker
-  lab. `learn-assessment@master` grades over **SSH via pyATS**, so a local marking scheme must
-  connect to `%ENV{lab_ip}` on port **2222** with `ssh_user`/`ssh_password`. Authoring that is
-  assessment-domain work — tracked in this repo's issue #1.
+- **Assessment side** is drafted in [`../assessment.docker/`](../assessment.docker/README.md)
+  (pyATS/SSH marking scheme for the current `learn-assessment` engine) — in review with the
+  assessment agent. The repo's legacy `assessment/marking-scheme.json` (Azure-management-REST)
+  does not apply to a Docker lab.
 - **Fully offline** requires the `sshd` image present on the host (pre-pull once); the
   socket-proxy allows the daemon to pull on first use.

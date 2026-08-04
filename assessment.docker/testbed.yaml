@@ -1,0 +1,28 @@
+# pyATS testbed for the local Docker lab.
+#
+# learn-assessment (master / pyATS engine) connects to the sshd container over SSH and runs
+# the marking scheme in ms.yaml against it. The %ENV{...} values come from tf-dynamic-params.json
+# produced by deploy.docker/: the worker exports each dynamic-param `value` as an environment
+# variable (dashes -> underscores), which pyATS interpolates here.
+#
+# The device is named `lab` — the same name the ms.yaml steps target (`device: lab`).
+testbed:
+  name: local-docker-lab
+
+devices:
+  lab:
+    os: linux
+    type: linux
+    credentials:
+      default:
+        username: "%ENV{ssh_user}"
+        password: "%ENV{ssh_password}"
+    connections:
+      cli:
+        protocol: ssh
+        ip: "%ENV{lab_ip}"
+        # linuxserver/openssh-server listens on 2222 (matches the ssh_port output). Hardcoded
+        # rather than %ENV{ssh_port} to avoid string/int coercion; change if you swap the image.
+        port: 2222
+        # ephemeral labs have fresh host keys each deploy — don't prompt / persist them
+        ssh_options: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
