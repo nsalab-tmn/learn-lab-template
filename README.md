@@ -2,6 +2,12 @@
 Данный репозиторий представляет из себя шаблон репозитория лабораторной работы. 
 определение лабораторной работы начинается с файла [learn-metadata.json](./learn-metadata.json)
 
+> **Lab targets.** [`deploy/`](./deploy) is the **Azure** (cloud) target. [`deploy.docker/`](./deploy.docker)
+> is a **local (Docker)** target so the stack can run and grade a lab offline on docker compose —
+> see [`deploy.docker/README.md`](./deploy.docker/README.md) and the KB
+> [multi-target-data-plane decision](https://github.com/nsalab-tmn/learn-knowledge-base/blob/main/decisions/multi-target-data-plane.md).
+> A material selects one target as its `deploy/` (single-target); carrying both is roadmap.
+
 ## Формат файла метаданных learn-metadata.json
 Файл является конфигурационным json файлом со следующим набором полей:
 * `title` - человекочитаемое наименование лабораторной по умолчанию.
