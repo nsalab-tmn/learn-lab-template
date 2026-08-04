@@ -1,51 +1,41 @@
 {
-    "title": "Sample lab",
+    "title": "Sample lab (local Docker)",
     "shortName": "smpl_lab",
     "materialType": "lab",
-    "description": "Sample description",
-    "markingScheme": { "$ref": "./assessment/marking-scheme.json" },
-    "deploy": { "$ref": "./deploy" },
+    "description": "Sample hands-on lab provisioned as a local Docker container — runs offline via docker compose.",
+    "deploy": { "$ref": "./deploy.docker" },
+    "assessment": { "$ref": "./assessment.docker" },
     "text": { "$ref": "./testProject.md" },
     "assets": { "$ref": "./assets" },
     "answerSchema": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-            "ticket1": {
+            "answer1": {
                 "type": "string",
-                "placeholder": "answer1",
-                "title": "Вопрос 1"
-            },
-            "ticket2": {
-                "type": "string",
-                "placeholder": "answer2",
-                "title": "Вопрос 2"
-            },
-            "endpoint_url": {
-                "type": "string",
-                "title": "адрес приложения",
-                "placeholder": "https://example.com"
+                "placeholder": "answer",
+                "title": "Sample question"
             }
         }
     },
     "credentialsSchema": {
+        "host": {
+            "title": "Host",
+            "source": "lab_host"
+        },
         "userName": {
-            "title": "Имя пользователя",
-            "source": "learn_user"
+            "title": "User name",
+            "source": "ssh_user"
         },
         "password": {
-            "title": "Пароль",
-            "source": "learn_password"
-        },
-        "consoleURL": {
-            "title": "Адрес портала",
-            "value": "https://portal.azure.com"
+            "title": "Password",
+            "source": "ssh_password"
         }
     },
-    "duration": "PT3H30M",
-    "difficulty": 10,
+    "duration": "PT1H",
+    "difficulty": 2,
     "tags": [
-        "Azure", "SampleTag"
+        "Docker", "local", "SampleTag"
     ],
     "skills": {}
 }
