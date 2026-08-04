@@ -5,8 +5,12 @@ The assessment side of the local lab target, written for the **current `learn-as
 Azure-management-REST model in this repo's `assessment/marking-scheme.json` (that predates the
 pyATS engine and does not apply to a Docker lab).
 
-> **Status: DRAFT for assessment-agent review.** Validated statically (below) but **not run
-> against a live lab / pyATS** — pyATS isn't installed here. Please review before wiring in.
+> **Status: reviewed by the assessment agent (LGTM for the engine, learn-lab-template#3).**
+> Validated statically (below) but **not yet run against a live lab / pyATS**. Remaining gate is
+> the ingestion path (core/infra), not the scheme itself.
+>
+> **Requires `learn-assessment` post-#48** — master exports the dynamic-param env vars *before*
+> `load_testbed`, so `%ENV{...}` resolves at load time.
 
 ## Files (the exact names `Assessment.from_dir` loads)
 
@@ -38,13 +42,25 @@ Two aspects, 10 marks total — a template to adapt:
   the testbed, `verify_output` is an implemented action, no `{param}` references are undefined,
   no two aspects share identical steps.
 
-## Open questions for the assessment (and core) agents
+## Review outcome
 
-1. **Ingestion mapping.** `learn-metadata.json`'s `markingScheme` is a single JSON `$ref` (the
-   old model). The pyATS engine loads a **folder** of `testbed.yaml`/`ms.yaml`/`parameters.yaml`.
-   How should core ingest a material's assessment into that folder shape? This mapping is the
-   real blocker for a live run and spans assessment + core.
-2. **Connection.** Confirm `os: linux` + unicon SSH works against `linuxserver/openssh-server`
-   (port 2222, password auth) and that the `ssh_options` host-key handling is acceptable.
-3. **Port.** `ssh_port` is emitted as an output but hardcoded to `2222` in the testbed to avoid
-   `%ENV` string/int coercion — fine, or interpolate it?
+- **Dynamic-param key names — confirmed match.** `deploy.docker/` emits `lab_ip`, `ssh_user`,
+  `ssh_password` (underscored), which the engine exports verbatim as env vars — the testbed's
+  `%ENV{...}` names line up. This key-name agreement is part of the deploy→assess contract
+  (learn-lab-deploy#38); the envelope *shape* is separately schema-guarded.
+- **Connection** — `os: linux` + unicon SSH to `linuxserver/openssh-server` (2222, password) is
+  standard; added `arguments: {connection_timeout: 30, learn_hostname: true}` so unicon reliably
+  learns the container prompt. Confirmed only by a live run.
+- **Port** — hardcoded `2222` is the safe template default (avoids `%ENV` string→int coercion).
+- **Aspect codes** made globally unique (`A.1.1`/`A.2.1`) — `MarkSummary` is a flat map keyed by
+  aspect code.
+
+## The one remaining gate — ingestion (core/infra, not the engine)
+
+The engine already grades a **folder** fetched from `{materialId}/{assessmentPath}/`, and core
+sends `assessmentPath` in the `learn-assess` message. So the work is on the **core** side: store
+this `assessment.docker/` content in the assets bucket and pick the right `assessmentPath`
+**per lab target** (`assessment.docker` for local, the legacy Azure `assessment/` for cloud) —
+the symmetric partner of the per-target `deployPath`. The `learn-metadata.json` single-`$ref`
+model is the retired Azure-REST shape and doesn't apply. Tracked toward a KB amendment + a core
+issue; see learn-lab-deploy#38 and the multi-target-data-plane decision.

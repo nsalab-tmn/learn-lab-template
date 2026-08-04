@@ -26,3 +26,7 @@ devices:
         port: 2222
         # ephemeral labs have fresh host keys each deploy — don't prompt / persist them
         ssh_options: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+        # help unicon reliably learn the container's shell prompt (per learn-assessment review)
+        arguments:
+          connection_timeout: 30
+          learn_hostname: true

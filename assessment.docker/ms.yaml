@@ -17,9 +17,10 @@ Criterions:
       - code: "1"
         name: Access
         aspects:
-          - code: "1"
+          - code: "A.1.1" # globally unique — MarkSummary is a flat map keyed by aspect code
             name: SSH access works as the learner user
             max_mark: 5
+            skills: []
             steps:
               - code: "1"
                 name: whoami returns the learner user
@@ -35,9 +36,10 @@ Criterions:
       - code: "2"
         name: Task
         aspects:
-          - code: "1"
+          - code: "A.2.1" # globally unique — MarkSummary is a flat map keyed by aspect code
             name: Learner wrote "done" to /home/learner/answer.txt
             max_mark: 5
+            skills: []
             steps:
               - code: "1"
                 name: answer file exists with the expected content
