@@ -1,10 +1,16 @@
 {
-    "title": "Sample lab (local Docker)",
+    "title": "Sample lab (multi-target)",
     "shortName": "smpl_lab",
     "materialType": "lab",
-    "description": "Sample hands-on lab provisioned as a local Docker container — runs offline via docker compose.",
-    "deploy": { "$ref": "./deploy.docker" },
-    "assessment": { "$ref": "./assessment.docker" },
+    "description": "Sample hands-on lab with two provisioning targets — a local Docker container (offline) and an Azure VM — selected by LEARN_CORE_LAB_TARGET.",
+    "deploy": {
+        "docker": { "$ref": "./deploy.docker" },
+        "azure":  { "$ref": "./deploy" }
+    },
+    "assessment": {
+        "docker": { "$ref": "./assessment.docker" },
+        "azure":  { "$ref": "./assessment" }
+    },
     "text": { "$ref": "./testProject.md" },
     "assets": { "$ref": "./assets" },
     "answerSchema": {
