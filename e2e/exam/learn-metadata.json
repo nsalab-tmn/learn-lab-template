@@ -1,0 +1,100 @@
+{
+  "title": "E2E — Networking exam",
+  "shortName": "e2e_exam",
+  "materialType": "test-exam",
+  "description": "Exam variant — answers submitted in bulk and graded server-side.",
+  "passingScore": 50,
+  "duration": "PT20M",
+  "difficulty": 3,
+  "tags": [
+    "e2e",
+    "test-exam"
+  ],
+  "questions": [
+    {
+      "questionId": "q_single",
+      "question": "Which TCP port does SSH use by default?",
+      "answerType": "singleChoice",
+      "answers": [
+        {
+          "answerId": "a1",
+          "answer": "22",
+          "correct": true
+        },
+        {
+          "answerId": "a2",
+          "answer": "80",
+          "correct": false
+        },
+        {
+          "answerId": "a3",
+          "answer": "443",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "questionId": "q_multi",
+      "question": "Which are transport-layer protocols? (choose all)",
+      "answerType": "multiChoice",
+      "answers": [
+        {
+          "answerId": "b1",
+          "answer": "TCP",
+          "correct": true
+        },
+        {
+          "answerId": "b2",
+          "answer": "UDP",
+          "correct": true
+        },
+        {
+          "answerId": "b3",
+          "answer": "IP",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "questionId": "q_text",
+      "question": "Type the word shown in the lab task you must write to answer.txt.",
+      "answerType": "textInput",
+      "answers": [
+        {
+          "answerId": "c1",
+          "answer": "done",
+          "match": "^done$"
+        }
+      ]
+    },
+    {
+      "questionId": "q_match",
+      "question": "Match each protocol to its default port.",
+      "answerType": "matching",
+      "options": [
+        {
+          "id": "o_http",
+          "option": "HTTP",
+          "match": "80"
+        },
+        {
+          "id": "o_https",
+          "option": "HTTPS",
+          "match": "443"
+        }
+      ],
+      "answers": [
+        {
+          "answerId": "d1",
+          "answer": "80",
+          "match": "80"
+        },
+        {
+          "answerId": "d2",
+          "answer": "443",
+          "match": "443"
+        }
+      ]
+    }
+  ]
+}
