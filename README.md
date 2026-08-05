@@ -1,76 +1,92 @@
-# Шаблон репозитория лабораторной работы
-Данный репозиторий представляет из себя шаблон репозитория лабораторной работы. 
-определение лабораторной работы начинается с файла [learn-metadata.json](./learn-metadata.json)
+# learn-lab-template
 
-> **Lab targets.** [`deploy/`](./deploy) is the **Azure** (cloud) target. [`deploy.docker/`](./deploy.docker)
-> is a **local (Docker)** target so the stack can run and grade a lab offline on docker compose —
-> see [`deploy.docker/README.md`](./deploy.docker/README.md) and the KB
-> [multi-target-data-plane decision](https://github.com/nsalab-tmn/learn-knowledge-base/blob/main/decisions/multi-target-data-plane.md).
-> A material selects one target as its `deploy/` (single-target); carrying both is roadmap.
+This repo serves two purposes:
 
-## Формат файла метаданных learn-metadata.json
-Файл является конфигурационным json файлом со следующим набором полей:
-* `title` - человекочитаемое наименование лабораторной по умолчанию.
-* `materialType` - тип учебного материала. для лабораторных работ = "lab"
-* `shortName` - короткое наименование. Должно содержать не более 10 символов [a-z_]
-* `description` - короткое описание лабораторной
-* `markingScheme` - схема оценки лабораторной работы (для компонента LAB-ASSESSMENT)
-* `deploy` - список файлов с определением сценария развертки terraform (для компонента LAB-DEPLOY)
-* `assets` - список файлов с изображениями и прочими материалами, которые необходимо загрузить в объектное хранилище
-* `text` - текст задания в формате Markdown
-* `answerSchema` - jsonSchema определяющая список и формат полей для ответа. Каждый item в словаре `properties` - идентификатор поля ответа. В дополенение введены следующие поля:
-    * `title` - человекочитаемое наименование поля или текст вопроса
-    * `placeholder` - плейсхолдер отображаемый в поле ответа
-* `credentialsSchema` - словарь полей, котоыре будут отображаться в учетных данных. Ключ каждого объекта - идентификатор поля. Значние - словарь состоящий из следующих полей:
-    * `title` - Человекочитаемое название поля
-    * `source` - источник значения поля. Должен соответствовать названию **output** из сценария развертки (см [output.tf](./deploy/output.tf))
-    * `value` - статаческое значние поля. Является взаимоисключающим с `source`.
-* `duration` - продолжительность лабораторной в формате ISO8601 duration
-* `difficulty` - сложность от 1 до 10
-* `tags` - теги с коотрыми связана лабораторная работа
-* `skills` - словарь с охватываемым доменами знаний. (пока никак не реализован)
+1. **Reference template** for authoring a Learn material repo — a `learn-metadata.json` at the
+   repo root, with content pulled in by JSON `$ref` links, ingested by **learn-core**.
+2. **The platform's end-to-end test content** (learn-core#102 / KB
+   [`conventions/e2e-scenarios.md`](https://github.com/nsalab-tmn/learn-knowledge-base/blob/main/conventions/e2e-scenarios.md)).
+   **Local (Docker) deployment is the first-priority target** — it is what the offline
+   `docker compose` stack provisions and grades, and what the e2e suite exercises. The Azure target
+   is kept as a **reference example** (see [Targets](#targets)).
 
-## Формат файла схемы оценки marking-scheme.json
-Файл является json файлом со следующим набором полей:
-Словарь критериев:
-* `id` - индентификатор критерия. Набор букв. Словарь полей критерия:
-   * `name` - название критерия;
-   * `max_mark` - баллы за критерий;
-   * `subCriterions` - словарь саб критериев:
-      * `id` - индентификатор саб критерия. Набор цифр. Словарь полей саб критерия:
-         * `name` - название саб критерия;
-         * `max_mark` - баллы за саб критерий;
-         * `aspects` - словарь аспектов:
-            * `id` - индентификатор аспекта. Набор цифр. Словарь полей аспекта:
-               * `name` - название аспекта;
-               * `max_mark` - баллы за аспект;
-               * `type` - тип аспекта; типы могут быть `jmespath`,`webrequest`. `jmespath` -  проверка начилия ресурса или свойства ресурса c помощью jmespath и rest api azure. `jmespath` должен содержать словарь `actions`, которые содержат поле `filterForReseachInResourse`. `webrequest` - проверка, доступен ли веб-сайт по оставленной ссылке. `webrequest` должен содержать поле `nameAnswer`, `allresource` - проверка начилия ресурса или свойства ресурса c помощью jmespath из всех ресурсов группы. `allresource` должен содержать словарь `actions`, которые содержат поле `filterForReseachInResourse` 
-               * `filterForReseachInResourse` - словарь полей для типа jmespath для поиска ресурса для запроса url = `f"https://management.azure.com/subscriptions/{__cloud53AzureSubscription}/resourceGroups/{resourseGroupName}/providers/{provider}/{client}?api-version={api_verion}"`:
-                  * `api_verion` - версия api management azure. Например: `2021-07-01`
-                  * `provider` - provider. Например: `Microsoft.Compute`
-                  * `client` - client. Например: `virtualMachines`.
-                  * `query` - строка для поиска в формате jmespath. Например: `value[?name=='myVM']`
-               * `nameAnswer` - имя ответа студента.
-               *  `filterForReseachInResourse` - словарь полей для типа allresource для поиска ресурса для запроса url = `f"https://management.azure.com/subscriptions/{__cloud53AzureSubscription}/resourceGroups/{resourseGroupName}/resourses?api-version={api_verion}"`:
-                  * `api_verion` - версия api management azure. Например: `2021-07-01`
-                  * `query` - строка для поиска в формате jmespath. Например: `value[?starts_with(name,'my-hub-group') && type == 'Microsoft.Devices/IotHubs'].name`
+## Layout
 
-## Формат списка файлов
-Списки файлов для загрузки в облачное хранилище определяются как словарь в ключе которого относительная ссылка для загрузки в файловое хранилище, а в значении - полная ссылка на файл. Например:
-
-```json
-{
-  "./deploy/main.tf": "https://github.com/nsalab-tmn/learn-lab-template/tree/deploy/main.tf?ref=master",
-  "./deploy/outputs.tf": "https://github.com/nsalab-tmn/learn-lab-template/tree/deploy/outputs.tf?ref=master",
-  "./deploy/policies.tf": "https://github.com/nsalab-tmn/learn-lab-template/tree/deploy/policies.tf?ref=master",
-  "./deploy/variables.tf": "https://github.com/nsalab-tmn/learn-lab-template/tree/deploy/variables.tf?ref=master",
-}
+```
+learn-metadata.json     the root material — a hands-on lab (the gradeable e2e lab)
+testProject.md          the lab task (rendered as the material's `text`)
+assets/                 images etc. uploaded to object storage
+deploy.docker/          LOCAL Docker target — sshd container (kreuzwerker/docker). PRIMARY.
+assessment.docker/      LOCAL pyATS marking scheme — testbed.yaml / ms.yaml / parameters.yaml
+deploy/                 Azure target — reference example (see Targets)
+assessment/             legacy Azure-REST marking scheme — reference example only
+e2e/                    one material of EVERY materialType (for the full-stack e2e)
 ```
 
+### `e2e/` — all-types content
 
-## Реферальные ссылки в файле метаданных
-Файл поддерживает реферельные ссылки по стандарту JSON Reference. Чтобы указать значение поля через ссылку, необходимо указать объект с полем `$ref` в значении которого указана ссылка на файл, из которого будет взято содержимое. Ссылки могут быть как относительными (`./assessment/marking-scheme.json`), так и полными (`https://example.org/sample.json`). Таким образом можно определять любые JSON-объекты во внешних файлах и ссылаться на них в файле метаданных. В случае, если содержимое файла по ссылке не удалось распознать как JSON, собержимое буддет интерпретироваться как текст.
+So a single ingest exercises every `materialType`:
 
-Можно так же указывать ссылки на папки. В этом случае будет формироваться словарь файлов в ключе которого будет путь до файла, а в значении - полная ссылка на него.
+| Path | materialType |
+|---|---|
+| *(repo root)* | `lab` — the dual-target Docker lab (graded 10/10 by the e2e) |
+| `e2e/lecture` | `lecture` |
+| `e2e/test` | `test` — self-test quiz covering all four `answerType`s |
+| `e2e/exam` | `test-exam` |
+| `e2e/lab-exam` | `lab-exam` — reuses the root lab's Docker playbooks |
+| `e2e/course` | `course` — composes lecture + quiz + the root lab |
+| `e2e/path` | `learning-path` — lecture + quiz → certificate |
 
-Для использования ссылок на файлы из GitHub необходимо выделить в ссылке имя ветки репозитория и перенести его в параметр запроса `ref`. Например, если полная ссылка на файл `https://github.com/nsalab-tmn/learn-lab-template/blob/master/deploy/main.tf`, то в метаданных ссылка дожлна быть `https://github.com/nsalab-tmn/learn-lab-template/blob/deploy/main.tf?ref=master`
+## `learn-metadata.json` format
+
+A material is a JSON object. `$ref` values are resolved by core against GitHub/HTTP/relative URIs
+(a `$ref` to a **directory** becomes a `{path: url}` file-dict; for GitHub, move the branch into a
+`?ref=<branch>` query param).
+
+| Field | Meaning |
+|---|---|
+| `title` | Human-readable name (unique per `materialType`). |
+| `materialType` | One of `lab`, `lab-exam`, `test`, `test-exam`, `lecture`, `course`, `learning-path`. |
+| `shortName` | Short id, `[a-z_]`, ≤ ~10 chars. |
+| `description` | Short summary. |
+| `text` | Markdown body (lab task / lecture) — `$ref` a `.md` file. |
+| `deploy` | *(lab)* Terraform playbook folder for learn-lab-deploy. Either a single `{"$ref": "./folder"}` (single-target) **or** a per-target map `{ "docker": {"$ref": "./deploy.docker"}, "azure": {"$ref": "./deploy"} }` (multi-target — core selects one by `LEARN_CORE_LAB_TARGET`, learn-core#155). |
+| `assessment` | *(lab)* pyATS assessment **folder** (`testbed.yaml`/`ms.yaml`/`parameters.yaml`) — same single-`$ref`-or-per-target-map shape as `deploy`. |
+| `credentialsSchema` | *(lab)* fields shown in the learner's Credentials panel. Each key → `{ title, source }` (or `{ title, value }`). **`source`** must match a Terraform **output** name (a `tf-dynamic-params.json` key) — e.g. `lab_host`, `ssh_user`, `ssh_password` from `deploy.docker/outputs.tf`. |
+| `answerSchema` | *(lab)* JSON Schema for the learner's answer fields (`title`, `placeholder` per property). |
+| `assets` | Files (`$ref` a folder) uploaded to object storage and referenced from `text`. |
+| `questions` | *(test / test-exam)* the questions — see below. |
+| `passingScore` | *(test / test-exam)* pass threshold, 0–100 (default 75). |
+| `materials` | *(course / learning-path)* ordered `$ref`s to child materials' `learn-metadata.json`. |
+| `duration` | ISO-8601 duration, e.g. `PT1H`. |
+| `difficulty` | 1–10. |
+| `tags` | Catalog tags. |
+| `skills` | Skill-domain map (surfaced per aspect; authoring is optional). |
+
+> **Removed:** the old top-level `markingScheme` `$ref` (an Azure-management-REST shape) is gone —
+> assessment is a **folder** (`assessment/…`), graded by learn-assessment's pyATS engine
+> (learn-core#155/#156).
+
+### `questions` (test / test-exam)
+
+Each question: `questionId`, `question`, `answerType` ∈ `singleChoice | multiChoice | textInput |
+matching`, `answers[]` (`answerId`, `answer`, `correct?`, `match?` for text/matching, `comment?`),
+and `options[]` (`id`, `option`, `match`) for `matching`.
+
+## Targets
+
+Per the KB
+[multi-target-data-plane decision](https://github.com/nsalab-tmn/learn-knowledge-base/blob/main/decisions/multi-target-data-plane.md),
+a lab's target is a property of the material, selected by `LEARN_CORE_LAB_TARGET`; the worker stays
+target-agnostic. **Per-target playbooks must expose an identical output contract** (the same
+`tf-dynamic-params.json` key names) so one marking scheme grades the lab on any target.
+
+- **`deploy.docker/` + `assessment.docker/` — local (Docker), PRIMARY.** An sshd container on the
+  `learn-labs` network; outputs `lab_host`/`lab_ip`/`ssh_user`/`ssh_password`/`ssh_port`; graded over
+  SSH by pyATS. This is what runs and is graded offline and in the e2e.
+- **`deploy/` + `assessment/` — Azure, reference example only.** ⚠️ Not aligned to the local output
+  contract: `deploy/outputs.tf` emits `learn_rg`/`learn_user`/`learn_password` and `assessment/` is a
+  legacy Azure-REST scheme — so the Azure side of the root material's dual-target map is **not
+  gradable as-is**. It is retained to show the Azure playbook shape; making it a real second target
+  requires aligning its outputs to `lab_host`/`ssh_user`/`ssh_password` and porting the marking scheme
+  to the pyATS folder model.
