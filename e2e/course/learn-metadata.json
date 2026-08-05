@@ -1,0 +1,21 @@
+{
+  "title": "E2E — Sample course",
+  "shortName": "e2e_course",
+  "materialType": "course",
+  "description": "A course composing a lecture, a quiz and the hands-on lab.",
+  "tags": [
+    "e2e",
+    "course"
+  ],
+  "materials": [
+    {
+      "$ref": "../lecture/learn-metadata.json"
+    },
+    {
+      "$ref": "../test/learn-metadata.json"
+    },
+    {
+      "$ref": "../../learn-metadata.json"
+    }
+  ]
+}

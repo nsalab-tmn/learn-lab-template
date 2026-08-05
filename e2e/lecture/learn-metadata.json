@@ -1,0 +1,15 @@
+{
+  "title": "E2E — Intro lecture",
+  "shortName": "e2e_lecture",
+  "materialType": "lecture",
+  "description": "A short reading unit for the e2e all-types content set.",
+  "text": {
+    "$ref": "./lecture.md"
+  },
+  "duration": "PT10M",
+  "difficulty": 1,
+  "tags": [
+    "e2e",
+    "lecture"
+  ]
+}

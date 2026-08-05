@@ -1,0 +1,56 @@
+{
+  "title": "E2E — Lab exam (Docker)",
+  "shortName": "e2e_lab_exam",
+  "materialType": "lab-exam",
+  "description": "Exam variant of the hands-on lab; same dual-target playbooks as the sample lab.",
+  "deploy": {
+    "docker": {
+      "$ref": "../../deploy.docker"
+    },
+    "azure": {
+      "$ref": "../../deploy"
+    }
+  },
+  "assessment": {
+    "docker": {
+      "$ref": "../../assessment.docker"
+    },
+    "azure": {
+      "$ref": "../../assessment"
+    }
+  },
+  "text": {
+    "$ref": "../../testProject.md"
+  },
+  "answerSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "answer1": {
+        "type": "string",
+        "title": "Sample question",
+        "placeholder": "answer"
+      }
+    }
+  },
+  "credentialsSchema": {
+    "host": {
+      "title": "Host",
+      "source": "lab_host"
+    },
+    "userName": {
+      "title": "User name",
+      "source": "ssh_user"
+    },
+    "password": {
+      "title": "Password",
+      "source": "ssh_password"
+    }
+  },
+  "duration": "PT1H",
+  "difficulty": 3,
+  "tags": [
+    "e2e",
+    "lab-exam"
+  ]
+}

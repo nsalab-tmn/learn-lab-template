@@ -1,0 +1,18 @@
+{
+  "title": "E2E — Sample learning path",
+  "shortName": "e2e_path",
+  "materialType": "learning-path",
+  "description": "A learning path of a lecture + a quiz; completing both issues a certificate.",
+  "tags": [
+    "e2e",
+    "learning-path"
+  ],
+  "materials": [
+    {
+      "$ref": "../lecture/learn-metadata.json"
+    },
+    {
+      "$ref": "../test/learn-metadata.json"
+    }
+  ]
+}
