@@ -37,7 +37,7 @@ Criterions:
         name: Task
         aspects:
           - code: "A.2.1" # globally unique — MarkSummary is a flat map keyed by aspect code
-            name: Learner wrote "done" to /home/learner/answer.txt
+            name: Learner wrote "done" to ~/answer.txt
             max_mark: 5
             skills: []
             steps:
@@ -47,8 +47,10 @@ Criterions:
                 type: verify
                 action_chain:
                   - action: verify_output
+                    # ~ expands to the learner's home (/config on the linuxserver image);
+                    # portable across images. Verified against a live container.
                     action_vars:
-                      command: "cat /home/learner/answer.txt 2>/dev/null || true"
+                      command: "cat ~/answer.txt 2>/dev/null || true"
                       assert_tags:
                         - done
                       tags_are_present: true
