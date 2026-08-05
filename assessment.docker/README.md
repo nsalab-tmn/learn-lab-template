@@ -5,9 +5,10 @@ The assessment side of the local lab target, written for the **current `learn-as
 Azure-management-REST model in this repo's `assessment/marking-scheme.json` (that predates the
 pyATS engine and does not apply to a Docker lab).
 
-> **Status: reviewed by the assessment agent (LGTM for the engine, learn-lab-template#3).**
-> Validated statically (below) but **not yet run against a live lab / pyATS**. Remaining gate is
-> the ingestion path (core/infra), not the scheme itself.
+> **Status: reviewed by the assessment agent (LGTM), and the data plane is live-validated.**
+> The `deploy.docker/` → SSH-grade → destroy loop was run against a real Docker daemon (container
+> on the `learn-labs` network; SSH access + the task check both behave). A full run through the
+> *pyATS* engine still depends on the compose stack being up.
 >
 > **Requires `learn-assessment` post-#48** — master exports the dynamic-param env vars *before*
 > `load_testbed`, so `%ENV{...}` resolves at load time.
@@ -29,11 +30,10 @@ worker exports each dynamic-param `value` as an env var (dashes→underscores), 
 Two aspects, 10 marks total — a template to adapt:
 1. **SSH access (5)** — `verify_output` runs `whoami`, asserts `learner` is present (proves the
    lab is reachable and the credentials work).
-2. **The task (5)** — `verify_output` runs `cat /home/learner/answer.txt`, asserts `done` is
-   present.
+2. **The task (5)** — `verify_output` runs `cat ~/answer.txt`, asserts `done` is present.
 
 **Sample task text** (for `testProject.md`): *"Connect to the lab over SSH and write the word
-`done` into `/home/learner/answer.txt`."*
+`done` into `~/answer.txt`."* (`~` is the learner's home — `/config` on the linuxserver image.)
 
 ## Validation done
 
@@ -41,6 +41,12 @@ Two aspects, 10 marks total — a template to adapt:
 - The scheme passes the engine's own `validate_scheme` rules (replicated): device `lab` is in
   the testbed, `verify_output` is an implemented action, no `{param}` references are undefined,
   no two aspects share identical steps.
+- **Live data-plane run** (local terraform + Docker): `deploy.docker/` created the container on
+  `learn-labs` with the expected outputs; SSH from a sibling container connected with the emitted
+  credentials and `whoami` returned `learner` (access aspect); `cat ~/answer.txt` returned `done`
+  after the task and empty before (task aspect passes/fails correctly); `terraform destroy`
+  removed the container. This fixed the answer path (`~/answer.txt`, not `/home/learner/...`) —
+  the learner's home is `/config` on this image.
 
 ## Review outcome
 

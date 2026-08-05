@@ -8,13 +8,13 @@ You are given SSH access to a Linux container (credentials are shown in the lab'
 ## Task
 
 1. Connect to the lab over SSH as the `learner` user.
-2. Write the word `done` into `/home/learner/answer.txt`:
+2. Write the word `done` into `answer.txt` in your home directory:
 
    ```shell
-   echo done > /home/learner/answer.txt
+   echo done > ~/answer.txt
    ```
 
 The grader connects over SSH and checks that you can log in and that
-`/home/learner/answer.txt` contains `done`.
+`~/answer.txt` contains `done`.
 
 ![Sample Image](./assets/sample-photo.jpeg)
