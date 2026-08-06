@@ -14,30 +14,6 @@ provider "azurerm" {
   features {}
 }
 
-variable "instance_id" {
-  type = string
-}
-variable "tp_name" {
-  type    = string
-  default = ""
-}
-variable "tp_learn_env" {
-  type    = string
-  default = ""
-}
-variable "tp_learn_user" {
-  type    = string
-  default = ""
-}
-variable "variant_seed" {
-  type    = string
-  default = "0"
-}
-variable "location" {
-  type    = string
-  default = "uksouth"
-}
-
 resource "random_password" "ssh" {
   length  = 20
   special = false
@@ -122,17 +98,4 @@ resource "azurerm_linux_virtual_machine" "vm" {
     learn_instance_id = var.instance_id
     variant_seed      = var.variant_seed
   }
-}
-output "lab_host" {
-  value = azurerm_public_ip.pip.ip_address
-}
-output "ssh_user" {
-  value = "learner"
-}
-output "ssh_password" {
-  value     = random_password.ssh.result
-  sensitive = true
-}
-output "variant_seed" {
-  value = var.variant_seed
 }
