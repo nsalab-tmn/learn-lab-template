@@ -2,17 +2,29 @@
     "title": "Sample lab (multi-target)",
     "shortName": "smpl_lab",
     "materialType": "lab",
-    "description": "Sample hands-on lab with two provisioning targets — a local Docker container (offline) and an Azure VM — selected by LEARN_CORE_LAB_TARGET.",
+    "description": "Sample hands-on lab with two provisioning targets — pluggable compute (local/azure) + two content variants (lab-compute-and-variants).",
     "deploy": {
-        "docker": { "$ref": "./deploy.docker" },
-        "azure":  { "$ref": "./deploy" }
+        "docker": {
+            "$ref": "./deploy.docker"
+        },
+        "azure": {
+            "$ref": "./deploy"
+        }
     },
     "assessment": {
-        "docker": { "$ref": "./assessment.docker" },
-        "azure":  { "$ref": "./assessment" }
+        "docker": {
+            "$ref": "./assessment.docker"
+        },
+        "azure": {
+            "$ref": "./assessment"
+        }
     },
-    "text": { "$ref": "./testProject.md" },
-    "assets": { "$ref": "./assets" },
+    "text": {
+        "$ref": "./testProject.md"
+    },
+    "assets": {
+        "$ref": "./assets"
+    },
     "answerSchema": {
         "type": "object",
         "additionalProperties": false,
@@ -41,7 +53,35 @@
     "duration": "PT1H",
     "difficulty": 2,
     "tags": [
-        "Docker", "local", "SampleTag"
+        "Docker",
+        "local",
+        "SampleTag"
     ],
-    "skills": {}
+    "skills": {},
+    "variants": [
+        {
+            "shortName": "v0",
+            "text": {
+                "$ref": "./variants/v0/task.md"
+            },
+            "assessment": {
+                "$ref": "./assessment.docker"
+            },
+            "params": {
+                "variant_seed": "0"
+            }
+        },
+        {
+            "shortName": "v1",
+            "text": {
+                "$ref": "./variants/v1/task.md"
+            },
+            "assessment": {
+                "$ref": "./assessment.docker"
+            },
+            "params": {
+                "variant_seed": "1"
+            }
+        }
+    ]
 }
