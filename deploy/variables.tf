@@ -1,10 +1,11 @@
 variable "instance_id" {
-  type = string
+  type    = string
+  default = "user01_1111" # = userMaterialId
 }
 
 variable "tp_name" {
   type    = string
-  default = ""
+  default = "smpl_lab" # = materialId
 }
 
 variable "tp_learn_env" {
