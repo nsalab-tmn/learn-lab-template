@@ -18,3 +18,9 @@ variable "tp_learn_user" {
   type    = string
   default = ""
 }
+
+# Assigned content variant's params flow in as -var flags (lab-compute-and-variants).
+variable "variant_seed" {
+  type    = string
+  default = "0" # single implicit variant
+}

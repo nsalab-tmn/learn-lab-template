@@ -40,6 +40,7 @@ resource "docker_container" "lab" {
     "USER_NAME=learner",
     "USER_PASSWORD=${random_password.ssh.result}",
     "PASSWORD_ACCESS=true",
+    "VARIANT_SEED=${var.variant_seed}",
   ]
 
   # Attach to the shared lab network so learn-assessment can reach the container.
@@ -51,5 +52,10 @@ resource "docker_container" "lab" {
   labels {
     label = "learn.instance_id"
     value = var.instance_id
+  }
+
+  labels {
+    label = "learn.variant_seed"
+    value = var.variant_seed
   }
 }
