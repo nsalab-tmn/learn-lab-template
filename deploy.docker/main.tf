@@ -27,9 +27,11 @@ resource "random_password" "ssh" {
 }
 
 resource "docker_image" "sshd" {
-  # For a fully-offline run the image must be present on the host (pre-pull once);
-  # the socket-proxy has IMAGES=1 so the daemon can also pull on first use.
-  name = "lscr.io/linuxserver/openssh-server:latest"
+  # Digest-pinned (the multi-arch image-index digest of linuxserver/openssh-server) so the
+  # lab provisions air-gapped: with the image pre-pulled onto the host, keep_locally stops
+  # terraform re-checking the registry on apply. Bundle this exact digest for the offline run.
+  name         = "lscr.io/linuxserver/openssh-server@sha256:96b9a4d3b5106746d08d43a6911650d4d21f7d5c7f2ac9660e792bdb5e63157c"
+  keep_locally = true
 }
 
 resource "docker_container" "lab" {
