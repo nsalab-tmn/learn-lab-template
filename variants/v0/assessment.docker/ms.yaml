@@ -1,0 +1,52 @@
+# Marking scheme for variant v0 of the local Docker lab (pyATS engine).
+#
+# Distinct per variant: v0's task asks the learner to write "alpha" to ~/answer.txt
+# (variants/v0/task.md), so the task aspect asserts `alpha` — where v1 asserts `bravo`. The
+# access aspect is variant-invariant. This is the enabling half of lab-template#18: v0 and v1
+# now grade against different marking schemes, so a learner's answer passes one variant and
+# fails the other. Structure + engine semantics: see ../../assessment.docker/README.md.
+mark: 0
+max_mark: 0
+Criterions:
+  - code: A
+    name: Local lab (v0) — access and task
+    subCriterions:
+      - code: "1"
+        name: Access
+        aspects:
+          - code: "A.1.1" # globally unique — MarkSummary is a flat map keyed by aspect code
+            name: SSH access works as the learner user
+            max_mark: 5
+            skills: []
+            steps:
+              - code: "1"
+                name: whoami returns the learner user
+                device: lab
+                type: verify
+                action_chain:
+                  - action: verify_output
+                    action_vars:
+                      command: whoami
+                      assert_tags:
+                        - learner
+                      tags_are_present: true
+      - code: "2"
+        name: Task
+        aspects:
+          - code: "A.2.1" # globally unique — MarkSummary is a flat map keyed by aspect code
+            name: Learner wrote "alpha" to ~/answer.txt
+            max_mark: 5
+            skills: []
+            steps:
+              - code: "1"
+                name: answer file exists with the expected content
+                device: lab
+                type: verify
+                action_chain:
+                  - action: verify_output
+                    # ~ expands to the learner's home (/config on the linuxserver image).
+                    action_vars:
+                      command: "cat ~/answer.txt 2>/dev/null || true"
+                      assert_tags:
+                        - alpha
+                      tags_are_present: true

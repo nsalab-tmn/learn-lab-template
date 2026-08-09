@@ -65,7 +65,7 @@
                 "$ref": "./variants/v0/task.md"
             },
             "assessment": {
-                "$ref": "./assessment.docker"
+                "$ref": "./variants/v0/assessment.docker"
             },
             "params": {
                 "variant_seed": "0"
@@ -77,7 +77,7 @@
                 "$ref": "./variants/v1/task.md"
             },
             "assessment": {
-                "$ref": "./assessment.docker"
+                "$ref": "./variants/v1/assessment.docker"
             },
             "params": {
                 "variant_seed": "1"
