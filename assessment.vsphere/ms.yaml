@@ -1,0 +1,50 @@
+# Marking scheme for the vSphere lab target (pyATS engine).
+#
+# Reuses the local sshd lab's gradeable shape (lab-template#22 boundary): the learner SSHes into
+# the VM as `learner` and writes "done" into ~/answer.txt. Target-invariant — identical criteria
+# to assessment.docker/ (only the testbed's SSH port differs). Engine semantics + the deploy->assess
+# %ENV contract are documented in ../assessment.docker/README.md.
+mark: 0
+max_mark: 0
+Criterions:
+  - code: A
+    name: vSphere lab — access and task
+    subCriterions:
+      - code: "1"
+        name: Access
+        aspects:
+          - code: "A.1.1" # globally unique — MarkSummary is a flat map keyed by aspect code
+            name: SSH access works as the learner user
+            max_mark: 5
+            skills: []
+            steps:
+              - code: "1"
+                name: whoami returns the learner user
+                device: lab
+                type: verify
+                action_chain:
+                  - action: verify_output
+                    action_vars:
+                      command: whoami
+                      assert_tags:
+                        - learner
+                      tags_are_present: true
+      - code: "2"
+        name: Task
+        aspects:
+          - code: "A.2.1" # globally unique — MarkSummary is a flat map keyed by aspect code
+            name: Learner wrote "done" to ~/answer.txt
+            max_mark: 5
+            skills: []
+            steps:
+              - code: "1"
+                name: answer file exists with the expected content
+                device: lab
+                type: verify
+                action_chain:
+                  - action: verify_output
+                    action_vars:
+                      command: "cat ~/answer.txt 2>/dev/null || true"
+                      assert_tags:
+                        - done
+                      tags_are_present: true

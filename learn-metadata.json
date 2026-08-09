@@ -9,6 +9,9 @@
         },
         "azure": {
             "$ref": "./compute/azure"
+        },
+        "vsphere": {
+            "$ref": "./compute/vsphere"
         }
     },
     "assessment": {
@@ -17,6 +20,9 @@
         },
         "azure": {
             "$ref": "./assessment"
+        },
+        "vsphere": {
+            "$ref": "./assessment.vsphere"
         }
     },
     "text": {
