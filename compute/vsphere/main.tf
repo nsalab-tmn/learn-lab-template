@@ -89,10 +89,11 @@ resource "vsphere_virtual_machine" "lab" {
   guest_id  = data.vsphere_virtual_machine.template.guest_id
   scsi_type = data.vsphere_virtual_machine.template.scsi_type
 
-  # template-ubuntu-24 is an EFI template; the clone must match its firmware or power-on fails
-  # with "ACPI motherboard layout requires EFI" (the default is bios). Secure Boot is left off
-  # (the template doesn't require it); add efi_secure_boot_enabled = true if a template ever does.
-  firmware = "efi"
+  # Inherit the template's firmware (bios/efi) so the clone can never mismatch it — a mismatch
+  # power-on-fails with "ACPI motherboard layout requires EFI". Inheriting means a new template
+  # of either firmware just works, with no playbook edit or template flip. Secure Boot is left
+  # off (add efi_secure_boot_enabled = true only if a template requires it).
+  firmware = data.vsphere_virtual_machine.template.firmware
 
   # Keep the lab discoverable by instance/variant for an orphan-reaper.
   annotation = "learn.instance_id=${var.instance_id} learn.variant_seed=${var.variant_seed}"
