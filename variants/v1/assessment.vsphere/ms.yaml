@@ -1,0 +1,52 @@
+# Marking scheme for variant v1 on the vSphere target (pyATS engine).
+#
+# Target-invariant grading, per-variant task: v1's task asks the learner to write "bravo" to
+# ~/answer.txt (variants/v1/task.md), so the task aspect asserts `bravo` — where v0 asserts
+# `alpha`. Identical criteria to variants/v1/assessment.docker/ms.yaml; only the sibling
+# testbed's SSH port differs (22 here vs the Docker target's 2222). This is the vsphere half of
+# the per-kind variant assessment map (lab-template#22 follow-up + learn-core#212): a variant lab
+# deployed to vsphere grades against this scheme, not the Docker one.
+mark: 0
+max_mark: 0
+Criterions:
+  - code: A
+    name: vSphere lab (v1) — access and task
+    subCriterions:
+      - code: "1"
+        name: Access
+        aspects:
+          - code: "A.1.1" # globally unique — MarkSummary is a flat map keyed by aspect code
+            name: SSH access works as the learner user
+            max_mark: 5
+            skills: []
+            steps:
+              - code: "1"
+                name: whoami returns the learner user
+                device: lab
+                type: verify
+                action_chain:
+                  - action: verify_output
+                    action_vars:
+                      command: whoami
+                      assert_tags:
+                        - learner
+                      tags_are_present: true
+      - code: "2"
+        name: Task
+        aspects:
+          - code: "A.2.1" # globally unique — MarkSummary is a flat map keyed by aspect code
+            name: Learner wrote "bravo" to ~/answer.txt
+            max_mark: 5
+            skills: []
+            steps:
+              - code: "1"
+                name: answer file exists with the expected content
+                device: lab
+                type: verify
+                action_chain:
+                  - action: verify_output
+                    action_vars:
+                      command: "cat ~/answer.txt 2>/dev/null || true"
+                      assert_tags:
+                        - bravo
+                      tags_are_present: true
