@@ -87,6 +87,11 @@ resource "vsphere_virtual_machine" "lab" {
   guest_id  = data.vsphere_virtual_machine.template.guest_id
   scsi_type = data.vsphere_virtual_machine.template.scsi_type
 
+  # template-ubuntu-24 is an EFI template; the clone must match its firmware or power-on fails
+  # with "ACPI motherboard layout requires EFI" (the default is bios). Secure Boot is left off
+  # (the template doesn't require it); add efi_secure_boot_enabled = true if a template ever does.
+  firmware = "efi"
+
   # Keep the lab discoverable by instance/variant for an orphan-reaper.
   annotation = "learn.instance_id=${var.instance_id} learn.variant_seed=${var.variant_seed}"
 
