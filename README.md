@@ -20,6 +20,8 @@ compute/local/          LOCAL Docker target — sshd container (kreuzwerker/dock
 assessment.docker/      LOCAL pyATS marking scheme — testbed.yaml / ms.yaml / parameters.yaml
 compute/azure/          Azure target — reference example (see Targets)
 assessment/             legacy Azure-REST marking scheme — reference example only
+compute/vsphere/        vSphere (on-prem VMware) target — SSH-reachable Ubuntu VM (pilot)
+assessment.vsphere/     vSphere pyATS marking scheme — SSH grade over port 22
 e2e/                    one material of EVERY materialType (for the full-stack e2e)
 ```
 
@@ -90,3 +92,9 @@ target-agnostic. **Per-target playbooks must expose an identical output contract
   gradable as-is**. It is retained to show the Azure playbook shape; making it a real second target
   requires aligning its outputs to `lab_host`/`ssh_user`/`ssh_password` and porting the marking scheme
   to the pyATS folder model.
+- **`compute/vsphere/` + `assessment.vsphere/` — on-prem vSphere, PILOT.** A Linux VM cloned from a
+  vCenter template into a dedicated `LEARN-TEST` folder; emits the same
+  `lab_host`/`lab_ip`/`ssh_user`/`ssh_password`/`ssh_port` contract, graded over SSH by pyATS
+  (port 22). **All** vCenter inventory (datacenter/cluster/datastore/network/template/folder) is a
+  `TF_VAR_VSPHERE_*` variable — zero DCIX literals ([lab-compute-and-variants#120](https://github.com/nsalab-tmn/learn-knowledge-base/blob/main/conventions/lab-compute-and-variants.md)); auth is ambient
+  `VSPHERE_*` (passthrough, [learn-lab-deploy#58](https://github.com/nsalab-tmn/learn-lab-deploy/issues/58)). Live acceptance is the deploy→SSH-grade→destroy run on vCenter.
