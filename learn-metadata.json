@@ -71,7 +71,12 @@
                 "$ref": "./variants/v0/task.md"
             },
             "assessment": {
-                "$ref": "./variants/v0/assessment.docker"
+                "local": {
+                    "$ref": "./variants/v0/assessment.docker"
+                },
+                "vsphere": {
+                    "$ref": "./variants/v0/assessment.vsphere"
+                }
             },
             "params": {
                 "variant_seed": "0"
@@ -83,7 +88,12 @@
                 "$ref": "./variants/v1/task.md"
             },
             "assessment": {
-                "$ref": "./variants/v1/assessment.docker"
+                "local": {
+                    "$ref": "./variants/v1/assessment.docker"
+                },
+                "vsphere": {
+                    "$ref": "./variants/v1/assessment.vsphere"
+                }
             },
             "params": {
                 "variant_seed": "1"

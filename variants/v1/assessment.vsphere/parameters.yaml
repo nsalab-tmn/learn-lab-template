@@ -1,0 +1,4 @@
+# Static params, merged before the dynamic tf-dynamic-params.json. Both knobs are optional
+# (the engine reads them with a default), listed here for clarity:
+skip_connections: [] # device names NOT to connect to (none — the single `lab` device is graded live)
+skiptype: [] # step `type` values to skip during grading
