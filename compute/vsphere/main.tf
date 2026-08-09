@@ -70,7 +70,9 @@ locals {
     network:
       version: 2
       ethernets:
-        ens192:
+        lab0:
+          match:
+            name: "e*"
           dhcp4: true
   EOT
   )
