@@ -16,9 +16,9 @@ This repo serves two purposes:
 learn-metadata.json     the root material — a hands-on lab (the gradeable e2e lab)
 testProject.md          the lab task (rendered as the material's `text`)
 assets/                 images etc. uploaded to object storage
-deploy.docker/          LOCAL Docker target — sshd container (kreuzwerker/docker). PRIMARY.
+compute/local/          LOCAL Docker target — sshd container (kreuzwerker/docker). PRIMARY.
 assessment.docker/      LOCAL pyATS marking scheme — testbed.yaml / ms.yaml / parameters.yaml
-deploy/                 Azure target — reference example (see Targets)
+compute/azure/          Azure target — reference example (see Targets)
 assessment/             legacy Azure-REST marking scheme — reference example only
 e2e/                    one material of EVERY materialType (for the full-stack e2e)
 ```
@@ -50,9 +50,9 @@ A material is a JSON object. `$ref` values are resolved by core against GitHub/H
 | `shortName` | Short id, `[a-z_]`, ≤ ~10 chars. |
 | `description` | Short summary. |
 | `text` | Markdown body (lab task / lecture) — `$ref` a `.md` file. |
-| `deploy` | *(lab)* Terraform playbook folder for learn-lab-deploy. Either a single `{"$ref": "./folder"}` (single-target) **or** a per-target map `{ "docker": {"$ref": "./deploy.docker"}, "azure": {"$ref": "./deploy"} }` (multi-target — core selects one by `LEARN_CORE_LAB_TARGET`, learn-core#155). |
-| `assessment` | *(lab)* pyATS assessment **folder** (`testbed.yaml`/`ms.yaml`/`parameters.yaml`) — same single-`$ref`-or-per-target-map shape as `deploy`. |
-| `credentialsSchema` | *(lab)* fields shown in the learner's Credentials panel. Each key → `{ title, source }` (or `{ title, value }`). **`source`** must match a Terraform **output** name (a `tf-dynamic-params.json` key) — e.g. `lab_host`, `ssh_user`, `ssh_password` from `deploy.docker/outputs.tf`. |
+| `compute` | *(lab)* Terraform playbook folder(s) for learn-lab-deploy, keyed by **compute kind**: `{ "local": {"$ref": "./compute/local"}, "azure": {"$ref": "./compute/azure"} }` (`local`≡`docker`, `local` required). Core resolves the active kind by `LEARN_CORE_LAB_COMPUTE` and stores it as the `deploymentPath` `{kind: path}` map (learn-core#196). The legacy `deploy` authoring key is **rejected with a 400**. |
+| `assessment` | *(lab)* pyATS assessment **folder** (`testbed.yaml`/`ms.yaml`/`parameters.yaml`) — a single `{"$ref": "./folder"}` **or** a per-compute-kind map `{ "local": {"$ref": "./assessment.docker"}, "azure": {"$ref": "./assessment"} }`, resolved to `assessmentPath`. |
+| `credentialsSchema` | *(lab)* fields shown in the learner's Credentials panel. Each key → `{ title, source }` (or `{ title, value }`). **`source`** must match a Terraform **output** name (a `tf-dynamic-params.json` key) — e.g. `lab_host`, `ssh_user`, `ssh_password` from `compute/local/outputs.tf`. |
 | `answerSchema` | *(lab)* JSON Schema for the learner's answer fields (`title`, `placeholder` per property). |
 | `assets` | Files (`$ref` a folder) uploaded to object storage and referenced from `text`. |
 | `questions` | *(test / test-exam)* the questions — see below. |
@@ -81,11 +81,11 @@ a lab's target is a property of the material, selected by `LEARN_CORE_LAB_TARGET
 target-agnostic. **Per-target playbooks must expose an identical output contract** (the same
 `tf-dynamic-params.json` key names) so one marking scheme grades the lab on any target.
 
-- **`deploy.docker/` + `assessment.docker/` — local (Docker), PRIMARY.** An sshd container on the
+- **`compute/local/` + `assessment.docker/` — local (Docker), PRIMARY.** An sshd container on the
   `learn-labs` network; outputs `lab_host`/`lab_ip`/`ssh_user`/`ssh_password`/`ssh_port`; graded over
   SSH by pyATS. This is what runs and is graded offline and in the e2e.
-- **`deploy/` + `assessment/` — Azure, reference example only.** ⚠️ Not aligned to the local output
-  contract: `deploy/outputs.tf` emits `learn_rg`/`learn_user`/`learn_password` and `assessment/` is a
+- **`compute/azure/` + `assessment/` — Azure, reference example only.** ⚠️ Not aligned to the local output
+  contract: `compute/azure/outputs.tf` emits `learn_rg`/`learn_user`/`learn_password` and `assessment/` is a
   legacy Azure-REST scheme — so the Azure side of the root material's dual-target map is **not
   gradable as-is**. It is retained to show the Azure playbook shape; making it a real second target
   requires aligning its outputs to `lab_host`/`ssh_user`/`ssh_password` and porting the marking scheme

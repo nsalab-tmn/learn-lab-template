@@ -3,16 +3,16 @@
     "shortName": "smpl_lab",
     "materialType": "lab",
     "description": "Sample hands-on lab with two provisioning targets — pluggable compute (local/azure) + two content variants (lab-compute-and-variants).",
-    "deploy": {
-        "docker": {
-            "$ref": "./deploy.docker"
+    "compute": {
+        "local": {
+            "$ref": "./compute/local"
         },
         "azure": {
-            "$ref": "./deploy"
+            "$ref": "./compute/azure"
         }
     },
     "assessment": {
-        "docker": {
+        "local": {
             "$ref": "./assessment.docker"
         },
         "azure": {

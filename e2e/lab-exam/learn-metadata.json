@@ -3,16 +3,16 @@
   "shortName": "e2e_lab_exam",
   "materialType": "lab-exam",
   "description": "Exam variant of the hands-on lab; same dual-target playbooks as the sample lab.",
-  "deploy": {
-    "docker": {
-      "$ref": "../../deploy.docker"
+  "compute": {
+    "local": {
+      "$ref": "../../compute/local"
     },
     "azure": {
-      "$ref": "../../deploy"
+      "$ref": "../../compute/azure"
     }
   },
   "assessment": {
-    "docker": {
+    "local": {
       "$ref": "../../assessment.docker"
     },
     "azure": {

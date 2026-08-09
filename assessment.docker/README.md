@@ -6,7 +6,7 @@ Azure-management-REST model in this repo's `assessment/marking-scheme.json` (tha
 pyATS engine and does not apply to a Docker lab).
 
 > **Status: reviewed by the assessment agent (LGTM), and the data plane is live-validated.**
-> The `deploy.docker/` → SSH-grade → destroy loop was run against a real Docker daemon (container
+> The `compute/local/` → SSH-grade → destroy loop was run against a real Docker daemon (container
 > on the `learn-labs` network; SSH access + the task check both behave). A full run through the
 > *pyATS* engine still depends on the compose stack being up.
 >
@@ -21,7 +21,7 @@ pyATS engine and does not apply to a Docker lab).
 | `ms.yaml` | the marking scheme tree (`Criterions → subCriterions → aspects → steps → action_chain`). |
 | `parameters.yaml` | static params (`skip_connections`, `skiptype` — both optional). |
 
-The `%ENV{...}` values come from `deploy.docker/`'s outputs via `tf-dynamic-params.json`: the
+The `%ENV{...}` values come from `compute/local/`'s outputs via `tf-dynamic-params.json`: the
 worker exports each dynamic-param `value` as an env var (dashes→underscores), so `lab_ip`,
 `ssh_user`, `ssh_password` are available to the testbed.
 
@@ -41,7 +41,7 @@ Two aspects, 10 marks total — a template to adapt:
 - The scheme passes the engine's own `validate_scheme` rules (replicated): device `lab` is in
   the testbed, `verify_output` is an implemented action, no `{param}` references are undefined,
   no two aspects share identical steps.
-- **Live data-plane run** (local terraform + Docker): `deploy.docker/` created the container on
+- **Live data-plane run** (local terraform + Docker): `compute/local/` created the container on
   `learn-labs` with the expected outputs; SSH from a sibling container connected with the emitted
   credentials and `whoami` returned `learner` (access aspect); `cat ~/answer.txt` returned `done`
   after the task and empty before (task aspect passes/fails correctly); `terraform destroy`
@@ -50,7 +50,7 @@ Two aspects, 10 marks total — a template to adapt:
 
 ## Review outcome
 
-- **Dynamic-param key names — confirmed match.** `deploy.docker/` emits `lab_ip`, `ssh_user`,
+- **Dynamic-param key names — confirmed match.** `compute/local/` emits `lab_ip`, `ssh_user`,
   `ssh_password` (underscored), which the engine exports verbatim as env vars — the testbed's
   `%ENV{...}` names line up. This key-name agreement is part of the deploy→assess contract
   (learn-lab-deploy#38); the envelope *shape* is separately schema-guarded.

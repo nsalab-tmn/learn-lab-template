@@ -1,4 +1,4 @@
-# `deploy.docker/` — local (Docker) lab target
+# `compute/local/` — local (Docker) lab target
 
 A Terraform playbook that provisions this lab as a **Docker container** instead of an Azure
 VM, so the whole Learn stack can run and grade a lab **offline** on `docker compose`. It is the
@@ -26,13 +26,14 @@ Outputs: `lab_host`, `lab_ip`, `ssh_port` (2222), `ssh_user`, `ssh_password` —
 `tf-dynamic-params.json` keys the marking scheme and `learn-metadata.json` `credentialsSchema`
 reference. Keep the names **identical across targets** so one marking scheme grades any target.
 
-## Using it as a material's `deploy/`
+## Using it as a material's compute kind
 
-`learn-core` ingests a single `deploy/` folder (the `learn-metadata.json` `"deploy"` `$ref`).
-For an **offline, single-target material** (Milestone A), point `deploy` at this playbook (or
-copy these files into `deploy/`); keep the Azure `deploy/` for the cloud target. Carrying
-**both** targets in one material under a per-target map is **Milestone B** (needs the core
-ingestion + `LEARN_CORE_LAB_TARGET` selection changes gated on the KB decision).
+`learn-core` ingests provisioning folders under the `compute` authoring key, keyed by **compute
+kind**: `"compute": { "local": { "$ref": "./compute/local" }, "azure": { "$ref": "./compute/azure" } }`
+(`local`≡`docker`, `local` required). Core resolves the active kind by `LEARN_CORE_LAB_COMPUTE`
+and stores the `deploymentPath` `{kind: path}` map (learn-core#196); the legacy single `deploy`
+authoring key is now **rejected with a 400**. This folder is the `local` kind; the Azure kind
+lives in [`../azure/`](../azure/).
 
 ## Status / caveats
 
@@ -40,7 +41,7 @@ ingestion + `LEARN_CORE_LAB_TARGET` selection changes gated on the KB decision).
   provider schemas (`terraform init && terraform validate` — succeeds).
 - **Not yet run end-to-end** — that needs the compose stack (`learn-infra`) up and a matching
   assessment marking scheme.
-- **Assessment side** is drafted in [`../assessment.docker/`](../assessment.docker/README.md)
+- **Assessment side** is drafted in [`../../assessment.docker/`](../../assessment.docker/README.md)
   (pyATS/SSH marking scheme for the current `learn-assessment` engine) — in review with the
   assessment agent. The repo's legacy `assessment/marking-scheme.json` (Azure-management-REST)
   does not apply to a Docker lab.
