@@ -1,0 +1,28 @@
+# Publishes images/private-ssh to GHCR as ghcr.io/nsalab-tmn/lab-private-ssh:<tag>, the private image the
+# e2e/private-image fixture pulls (learn-lab-deploy#90). Manual only: it never runs on push or PR.
+# The package must stay PRIVATE (GitHub creates a new container package private; check its settings once).
+name: private-image
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Image tag"
+        type: string
+        default: "v1"
+permissions:
+  contents: read
+  packages: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Log in to GHCR with the workflow's own token
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+      - name: Build and push
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          case "$TAG" in (*[!A-Za-z0-9._-]*|'') echo "bad tag"; exit 1;; esac
+          docker build -t "ghcr.io/nsalab-tmn/lab-private-ssh:$TAG" images/private-ssh
+          docker push "ghcr.io/nsalab-tmn/lab-private-ssh:$TAG"
