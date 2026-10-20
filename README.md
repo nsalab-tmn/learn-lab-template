@@ -38,6 +38,7 @@ So a single ingest exercises every `materialType`:
 | `e2e/lab-exam` | `lab-exam` — reuses the root lab's Docker playbooks |
 | `e2e/course` | `course` — composes lecture + quiz + the root lab |
 | `e2e/path` | `learning-path` — lecture + quiz → certificate |
+| `e2e/private-image` | `lab` — fixture: the Docker lab pulled from a private GHCR image with placeholder credentials (KB deployment-interfaces rule 8; learn-lab-deploy#90) |
 
 ## `learn-metadata.json` format
 
@@ -55,6 +56,7 @@ A material is a JSON object. `$ref` values are resolved by core against GitHub/H
 | `compute` | *(lab)* Terraform playbook folder(s) for learn-lab-deploy, keyed by **compute kind**: `{ "local": {"$ref": "./compute/local"}, "azure": {"$ref": "./compute/azure"} }` (`local`≡`docker`, `local` required). Core resolves the active kind by `LEARN_CORE_LAB_COMPUTE` and stores it as the `deploymentPath` `{kind: path}` map (learn-core#196). The legacy `deploy` authoring key is **rejected with a 400**. |
 | `assessment` | *(lab)* pyATS assessment **folder** (`testbed.yaml`/`ms.yaml`/`parameters.yaml`) — a single `{"$ref": "./folder"}` **or** a per-compute-kind map `{ "local": {"$ref": "./assessment.docker"}, "azure": {"$ref": "./assessment"} }`, resolved to `assessmentPath`. |
 | `credentialsSchema` | *(lab)* fields shown in the learner's Credentials panel. Each key → `{ title, source }` (or `{ title, value }`). **`source`** must match a Terraform **output** name (a `tf-dynamic-params.json` key) — e.g. `lab_host`, `ssh_user`, `ssh_password` from `compute/local/outputs.tf`. |
+| `placeholders` | *(lab)* names of the instance-supplied placeholder credentials the lab needs, from core's registry, e.g. `["GHCR_PULL_USER", "GHCR_PULL_TOKEN"]`. Each one is declared in the playbook as `variable "LEARN_SECRET_<NAME>"` (`sensitive`, `ephemeral`, no default); the lab is offered only where every one is configured and trusted (KB deployment-interfaces rule 8). Example: [`e2e/private-image/`](e2e/private-image/README.md). |
 | `answerSchema` | *(lab)* JSON Schema for the learner's answer fields (`title`, `placeholder` per property). |
 | `assets` | Files (`$ref` a folder) uploaded to object storage and referenced from `text`. |
 | `questions` | *(test / test-exam)* the questions — see below. |

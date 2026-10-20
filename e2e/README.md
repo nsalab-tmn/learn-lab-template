@@ -11,6 +11,7 @@ One material per `materialType`, so a single ingest exercises every type:
 | `e2e/lab-exam` | lab-exam (reuses the repo-root dual-target Docker lab) |
 | `e2e/course` | course (lecture + quiz + the root sample lab) |
 | `e2e/path` | learning-path (lecture + quiz → certificate) |
+| `e2e/private-image` | lab — fixture: the Docker lab from a private GHCR image, with placeholder credentials (learn-lab-deploy#90; [README](private-image/README.md)) |
 | *(repo root `learn-metadata.json`)* | lab (the validated dual-target Docker lab) |
 
 `course`/`path` reference leaves by `$ref` to their `learn-metadata.json`. The exact
