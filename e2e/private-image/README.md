@@ -17,7 +17,7 @@ rule 8, and the worker side is learn-lab-deploy `docs/credentials-span.md` §4.
 | `learn-metadata.json` | a `lab` material, `local` kind only; declares `"placeholders": ["GHCR_PULL_USER", "GHCR_PULL_TOKEN"]` (core registry names, learn-core#299) |
 | `compute/local/` | the Terraform playbook: the root `compute/local/` plus `registry_auth` and a private image |
 | `task.md` | the learner task (the same as the root lab's) |
-| assessment | the root lab's [`../../assessment.docker/`](../../assessment.docker/README.md), unchanged |
+| `assessment.docker/` | a copy of the root lab's [`assessment.docker/`](../../assessment.docker/README.md), byte-identical. The fixture keeps its own copy because a `$ref` that leaves the material's folder does not survive GitHub ingest (learn-core#308, learn-lab-deploy#90). |
 
 ## How the placeholders are wired
 

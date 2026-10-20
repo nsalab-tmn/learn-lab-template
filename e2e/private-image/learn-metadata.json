@@ -14,7 +14,7 @@
   },
   "assessment": {
     "local": {
-      "$ref": "../../assessment.docker"
+      "$ref": "./assessment.docker"
     }
   },
   "text": {
