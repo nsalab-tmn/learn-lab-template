@@ -74,12 +74,12 @@
       "answers": [
         {
           "answer": "80",
-          "match": "^80$",
+          "match": "80",
           "correct": true
         },
         {
           "answer": "443",
-          "match": "^443$",
+          "match": "443",
           "correct": true
         }
       ]
